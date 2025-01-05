@@ -5,7 +5,7 @@ import Product from "./Product";
 import ReactPaginate from "react-paginate";
 import { getCategoryProducts } from "../../redux/productSlice";
 
-const Products = ({ category ,sort}) => {
+const Products = ({ category, sort }) => {
   const dispatch = useDispatch();
   const { products, productStatus } = useSelector((state) => state.products);
 
@@ -29,9 +29,8 @@ const Products = ({ category ,sort}) => {
     setItemOffset(newOffset);
   };
 
-  console.log(products ,"products:"); 
-  console.log(sort ,"sort:");
-
+  console.log(products, "products:");
+  console.log(sort, "sort:");
 
   useEffect(() => {
     if (category) {
@@ -39,8 +38,7 @@ const Products = ({ category ,sort}) => {
     } else {
       dispatch(getProducts());
     }
-
-  }, [dispatch,category]);
+  }, [dispatch, category]);
 
   return (
     <div>
@@ -49,10 +47,19 @@ const Products = ({ category ,sort}) => {
       ) : (
         <>
           <div className="flex flex-wrap">
-            {currentItems?.map((product, i) => (
-              <Product key={i} product={product} />
-            ))}
+            {currentItems
+              ?.sort((a, b) =>
+                sort === "inc"
+                  ? a.price - b.price
+                  : sort === "dec"
+                  ? b.price - a.price
+                  : 0
+              )
+              ?.map((product, i) => (
+                <Product key={i} product={product} />
+              ))}
           </div>
+
           <ReactPaginate
             className="paginate"
             breakLabel="..."
